@@ -1,0 +1,387 @@
+syntax = "proto3";
+
+package coupon;
+
+import "google/api/annotations.proto";
+//import "protoc-gen-swagger/options/annotations.proto";
+
+//option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+// info: {
+//   version: "1.0"
+//   title:"会员卡券集成系统api"
+//   description:"会员卡券集成系统"
+// };
+// schemes: [HTTPS,HTTP]
+//};
+
+// 会员卡券集成服务
+service CouponService {
+
+    // 示例方法
+    rpc DemoMethod (DemoRequest) returns (DemoResponse) {
+        option (google.api.http) = {
+          post: "/api/v2/pos/coupon/example/DemoMethod"
+          body: "*"
+        };
+    }
+
+    // 根据卡号/会员号/手机号码获取会员信息，以及相关的会员促销和会员卡券信息
+    rpc GetMember (GetMemberRequest) returns (GetMemberResponse) {
+        option (google.api.http) = {
+        post: "/api/v2/pos/coupon/getMember"
+        body: "*"
+        };
+    }
+
+    // 用于计算第三方的促销
+    rpc CalculatePromotion (CalculatePromotionRequest) returns (CalculatePromotionResponse) {
+        option (google.api.http) = {
+        post: "/api/v2/pos/coupon/calculatePromotion"
+        body: "*"
+        };
+    }
+
+    // 用于验证卡券是否可以使用，包括会员卡券和非会员卡券
+    rpc VerifyCoupons (VerifyCouponsRequest) returns (VerifyCouponsResponse) {
+        option (google.api.http) = {
+        post: "/api/v2/pos/coupon/verifyCoupons"
+        body: "*"
+        };
+    }
+
+    // 用于核销卡券
+    rpc ConsumeCoupons (ConsumeCouponsRequest) returns (ConsumeCouponsResponse) {
+        option (google.api.http) = {
+        post: "/api/v2/pos/coupon/consumeCoupons"
+        body: "*"
+        };
+    }
+
+    // 用于反核销卡券
+    rpc CancelCoupons (CancelCouponsRequest) returns (CancelCouponsResponse) {
+        option (google.api.http) = {
+        post: "/api/v2/pos/coupon/cancelCoupons"
+        body: "*"
+        };
+    }
+}
+
+message DemoRequest {
+    string data = 1;
+}
+
+message DemoResponse {
+    string json = 1;
+}
+
+message GetMemberRequest {
+    //  渠道编码，HEYTEAMEMBER(喜茶会员)
+    string channel = 1;
+    //  卡号(card_no、member_code、mobile 三选一)
+    string card_no = 2;
+    //  会员编码(card_no、member_code、mobile 三选一)
+    string member_code = 3;
+    //  手机号(card_no、member_code、mobile 三选一)
+    string mobile = 4;
+    //  敏感信息	密码、辅助码、二磁道信息等,格式- password=123&CVN2=213&expiration=2025/10/13
+    string secret_content = 5;
+    // 门店id
+    uint64 store_id = 6;
+    // 门店partner id
+    uint64 partner_id = 7;
+    // 门店scope id，如果没有就传0
+    uint64 scope_id = 8;
+    // 用户id
+    uint64 user_id = 9;
+    //  附加扩展信息
+    string extend = 10;
+    // 订单信息
+    OrderContent order_content = 11;
+}
+
+message GetMemberResponse {
+    // 渠道编码
+    string channel = 1;
+    // 账户余额
+    double account_balance = 2;
+    // 历史总积分
+    int32 credit_total = 3;
+    // 积分余额
+    int32 credit_balance = 4;
+    // 会员卡号
+    string card_no = 5;
+    // 会员ID
+    string member_id = 6;
+    // 会员编号
+    string member_code = 7;
+    // 会员名字
+    string name = 8;
+    // 性别：MALE/FEMALE/NA(未知)
+    string gender = 9;
+    // 邮箱
+    string email = 10;
+    // 手机号码
+    string mobile = 11;
+    // 会员状态(TODO枚举类型待定义)
+    int32 status = 12;
+    // 会员等级id
+    string grade_id = 13;
+    // 会员等级名称
+    string grade_name = 14;
+    // 会员授予时间
+    string grant_date = 15;
+    // 是否员工
+    bool is_employee = 16;
+    // 头像
+    string avatar = 17;
+    // 可以用于支付的编码，根据不用厂商，可以是card_no或member_code
+    string paycode = 18;
+    // 根据会员等级id(grade_id)获取的Hex促销id, 多个以逗号","隔开。POS后台的会员等级主档单独维护一个扩展字段用来映射grade_id，字段名称在集成过程中定义
+    string promotion_id = 19;
+    // 卡券列表
+    repeated Coupon coupons = 20;
+    // 标签提示语
+    string greetings = 21;
+}
+
+// 卡券信息
+message Coupon {
+    string code_no = 1; // 券号(用于核销)
+    string id = 2; // HEX券类别(coupon_type)id，根据
+    string name = 3; // 券名称
+    string code = 4; // HEX券类别(coupon_type)编码
+    double prepay = 5; // 是否提前核销(HEX券类型配置)
+    string type_code = 6; // 外表卡券的类别编码，用于和HEX券类别映射. POS后台的卡券管理主档单独维护一个扩展字段用来映射type_code，字段名称在集成过程中定义
+    double par_value = 7; // 面值(或可以抵用的金额)
+    string type = 8; // 会员券(MEMBERSHIP)或非会员券(NORMAL)
+    string start_date = 9; // 有效期起始时间: "2020-10-01 00:00:00"
+    string expired_date = 10; // 有效期结束时间 "2020-10-07 00:00:00"
+    int32 status = 11; // 券状态: 1(可用), 0(不可用), 2(锁定)
+    int32 available_count = 12; // 剩余次数
+    string use_type = 13; // 多次券(MANY)/单次券(ONCE)
+    string promotion_id = 14; // 根据第三方券类别编码获取Hex券类别中的促销id, 多个以逗号","隔开。POS后台的卡券管理主档单独维护一个扩展字段用来映射券类别编码，字段名称在集成过程中定义
+    string start_timestamp = 15; // 有效期起始时间戳
+    string expired_timestamp = 16; // 有效期结束时间戳
+}
+
+// 卡券请求信息
+message CouponReq {
+    // 券号(用于核销)
+    string code_no = 1;
+    // 券密码
+    string password_code = 2;
+    // 核销次数，对应多次券，验证是否可以核销的次数
+    int32 qty = 3;
+}
+
+// 订单信息
+message OrderContent {
+    // 交易订单ticket id
+    string order_ticket_id = 1;
+    // pos id
+    string pos_id = 2;
+    // pos编码
+    string pos_code = 3;
+    // 桌位号
+    string table_no = 4;
+    // 交易时间 "2020-01-08 01:12:40"
+    string sales_time = 5;
+    // 营业日期 "2020-01-07"
+    string sales_date = 6;
+    // 毛额
+    double gross_amount = 7;
+    // 净额
+    double net_amount = 8;
+    // 商品列表，部分第三方支付需要根据商品列表进行促销计算
+    repeated Product products = 9;
+}
+
+// 会员信息
+message MemberContent {
+    // 卡号(card_no、member_code、mobile 三选一)
+    string card_no = 1;
+    // 会员编码(card_no、member_code、mobile 三选一)
+    string member_code = 2;
+    // 手机号(card_no、member_code、mobile 三选一)
+    string mobile = 3;
+    // 敏感信息     密码、辅助码、二磁道信息等,格式- password=123&CVN2=213&expiration=2025/10/13
+    string secret_content = 4;
+}
+
+// 商品
+message Product {
+    // 商品id
+    string id = 1;
+    // 商品名称
+    string name = 2;
+    // 商品编码
+    string code = 3;
+    // 数量
+    double qty = 4;
+    // 价格(每个商品的)
+    double price = 5;
+    // 加料
+    repeated Product accessories = 6;
+    // 属性
+    repeated Attribute attributes = 7;
+}
+
+// 属性
+message Attribute {
+    // 属性名称
+    string name = 1;
+    // 属性编码
+    string name_code = 2;
+    // 属性值
+    string value = 3;
+    // 属性值编码
+    string value_code = 4;
+    // 属性价格
+    double price = 5;
+}
+
+// 【第三方促销计算】请求
+message CalculatePromotionRequest {
+    // 渠道编码，HEYTEAMEMBER(喜茶会员)
+    string channel = 1;
+    // 门店id
+    uint64 store_id = 2;
+    // 门店partner id
+    uint64 partner_id = 3;
+    // 门店scope id，如果没有就传0
+    uint64 scope_id = 4;
+    // 用户id
+    uint64 user_id = 5;
+    // 订单信息
+    OrderContent order_content = 6;
+    // 会员信息
+    MemberContent member_content = 7;
+    // 附加扩展信息
+    string extend = 8;
+}
+
+// 【第三方促销计算】结果
+message CalculatePromotionResponse {
+    // 渠道编码
+    string channel = 1;
+    // 根据返回的促销信息会员获取的Hex促销id, 多个以逗号","隔开。不包含卡券。
+    string promotion_id = 2;
+    // 卡券列表
+    repeated Coupon coupons = 3;
+}
+
+// 【卡券验证】请求
+message VerifyCouponsRequest {
+    // 渠道编码，HEYTEAMEMBER(喜茶会员)
+    string channel = 1;
+    // 会员信息
+    MemberContent member_content = 2;
+    // 门店id
+    uint64 store_id = 3;
+    // 门店partner id
+    uint64 partner_id = 4;
+    // 门店scope id，如果没有就传0
+    uint64 scope_id = 5;
+    // 用户id
+    uint64 user_id = 6;
+    // 卡券列表
+    repeated CouponReq coupons = 7;
+    // 是否返回对应促销/Hex券id等主档，默认false
+    bool include_metadata = 8;
+}
+
+// 【卡券验证】结果
+message VerifyCouponsResponse {
+    // 渠道编码
+    string channel = 1;
+    // 是否验证成功
+    bool success = 2;
+    // 异常编码，查看交易接口异常返回
+    string error_code = 3;
+    // 异常信息
+    string message = 4;
+    // 第三方编码
+    string response_code = 5;
+    // 第三方报文(500字符以内)
+    string response_content = 6;
+    // 异常信息
+    repeated Coupon details = 7;
+}
+
+// 【卡券核销】请求
+message ConsumeCouponsRequest {
+    // 渠道编码，HEYTEAMEMBER(喜茶会员)
+    string channel = 1;
+    // 支付时传给第三方接口的唯一标识id
+    string batch_ticket_id = 2;
+    // 门店id
+    uint64 store_id = 3;
+    // 门店partner id
+    uint64 partner_id = 4;
+    // 门店scope id，如果没有就传0
+    uint64 scope_id = 5;
+    // 用户id
+    uint64 user_id = 6;
+    // 会员信息
+    MemberContent member_content = 7;
+    // 订单信息
+    OrderContent order_content = 8;
+    // 订单信息
+    repeated CouponReq coupons = 9;
+}
+
+// 【卡券核销】结果
+message ConsumeCouponsResponse {
+    // 渠道编码
+    string channel = 1;
+    // 是否验证成功
+    bool success = 2;
+    // 异常编码，查看交易接口的error_code
+    string error_code = 3;
+    // 异常信息
+    string message = 4;
+    // 第三方编码
+    string response_code = 5;
+    // 第三方报文(500字符以内)
+    string response_content = 6;
+}
+
+// 【卡券反核销】请求
+message CancelCouponsRequest {
+    // 渠道编码，HEYTEAMEMBER(喜茶会员)
+    string channel = 1;
+    // 支付时传给第三方接口的唯一标识id
+    string batch_ticket_id = 2;
+    // 门店id
+    uint64 store_id = 3;
+    // 门店partner id
+    uint64 partner_id = 4;
+    // 门店scope id，如果没有就传0
+    uint64 scope_id = 5;
+    // 用户id
+    uint64 user_id = 6;
+    // 会员信息
+    MemberContent member_content = 7;
+    // 订单信息
+    OrderContent order_content = 8;
+    // 订单信息
+    repeated CouponReq coupons = 9;
+
+}
+
+// 【卡券反核销】结果
+message CancelCouponsResponse {
+    // 渠道编码
+    string channel = 1;
+    // 是否验证成功
+    bool success = 2;
+    // 异常编码，查看交易接口的error_code
+    string error_code = 3;
+    // 异常信息
+    string message = 4;
+    // 第三方编码
+    string response_code = 5;
+    // 第三方报文(500字符以内)
+    string response_content = 6;
+}
+
