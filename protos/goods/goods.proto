@@ -1,23 +1,15 @@
 syntax = "proto3";
      package services;
-     import "goods_model.proto";
 
      message GoodsRequest {
-         // @inject_tag: json:"size",form:"size"
-         int32 size = 1;
          // @inject_tag: uri:"goods_id"
-         int32 goods_id=2;
+         int32 goods_id=1;  //传入商品ID
      }
 
-     message GoodsListResponse {
-         repeated GoodsModel data=1;
-     }
-
-     message GoodsDetailResponse {
-         GoodsModel data=1;
+     message GoodsResponse {
+         int32 goods_stock=1;  //商品库存
      }
 
      service GoodsService {
-         rpc GetGoodsList(GoodsRequest) returns(GoodsListResponse);
-         rpc GetGoodsDetail(GoodsRequest) returns(GoodsDetailResponse);
+         rpc GetGoodsStock(GoodsRequest) returns(GoodsResponse);
      }

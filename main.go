@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"google.golang.org/grpc"
+	"grpc-gateway/services"
+	"net"
+)
 
 func main(){
-	fmt.Println("欢迎来到grpc-gateway")
+	rpcServer := grpc.NewServer()
+	services.RegisterGoodsServiceServer(rpcServer,new(services.GoodsService))
+	lis,_ := net.Listen("tcp",":8081")
+	rpcServer.Serve(lis)
 }

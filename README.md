@@ -10,31 +10,23 @@ redIs ~
    ```go
     syntax = "proto3";
          package services;
-         import "goods_model.proto";
     
          message GoodsRequest {
-             // @inject_tag: json:"size",form:"size"
-             int32 size = 1;
              // @inject_tag: uri:"goods_id"
-             int32 goods_id=2;
+             int32 goods_id=1;  //传入商品ID
          }
     
-         message GoodsListResponse {
-             repeated GoodsModel data=1;
-         }
-    
-         message GoodsDetailResponse {
-             GoodsModel data=1;
+         message GoodsResponse {
+             int32 goods_stock data=1;  //商品库存
          }
     
          service GoodsService {
-             rpc GetGoodsList(GoodsRequest) returns(GoodsListResponse);
-             rpc GetGoodsDetail(GoodsRequest) returns(GoodsDetailResponse);
+             rpc GetGoodsStock(GoodsRequest) returns(GoodsResponse);
          }
     ```   
 
 2. proto文件编译  //protoc编译
-    protoc --go_out=./ goods.proto
+    protoc --go_out=plugins=grpc:../../services goods.proto
 
 3. 编译项目   //编译  
     go build
@@ -43,7 +35,7 @@ redIs ~
     go run main.go  
 
 
-###目录结构描述
+### 目录结构描述
 ├── Readme.md                   // help  
 ├── services                    // 应用服务  
 ├── config                      // 配置  
@@ -70,7 +62,7 @@ redIs ~
 ├── test-service.js  
 └── tools  
 
-###V1.0.0 版本内容更新
+### V1.0.0 版本内容更新
 1. 新功能     获取商品信息
 2. 新功能     获取优惠券信息
 3. 新功能     获取会员信息
