@@ -26,7 +26,9 @@ redIs ~
     ```   
 
 2. proto文件编译  //protoc编译
-    protoc --go_out=plugins=grpc:../../services goods.proto
+    protoc --go_out=plugins=grpc:../../services goods.proto    //protoc编译生成goods.pb.go   
+    protoc --grpc-gateway_out=logtostderr=true:../../services  //编译生成goods.pb.gw.go  
+    
 
 3. 编译项目   //编译  
     go build
