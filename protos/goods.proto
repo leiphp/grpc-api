@@ -12,10 +12,24 @@ message GoodsResponse {
  int32 goods_stock=1;  //商品库存
 }
 
+message GoodsSize {
+ int32 size=1;  //页尺寸
+}
+
+message GoodsResponseList {
+ repeated GoodsResponse goodsres=1; //返回多个商品使用repeated
+}
+
 service GoodsService {
  rpc GetGoodsStock(GoodsRequest) returns (GoodsResponse) {
      option (google.api.http) = {
        get: "/v1/goods/{goods_id}"
      };
   }
+
+  rpc GetGoodsStocks(GoodsSize) returns (GoodsResponseList) {
+       option (google.api.http) = {
+         get: "/v1/goods/list/{size}"
+       };
+    }
 }
