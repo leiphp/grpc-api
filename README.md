@@ -1,9 +1,8 @@
 # grpc-gateway
-grpc-gateway是一个基于grpc和protobuf开发的个人gateway项目，封装比较优雅，API友好，源码注释比较明确，具有快速灵活，容错方便等特点，让你快速了解golang项目中grpc和protobuf的使用
+grpc-gateway是一个基于grpc和protobuf开发的个人grpc服务端项目，封装比较优雅，API友好，源码注释比较明确，具有快速灵活，容错方便等特点，让你快速了解golang项目中grpc和protobuf的使用
 
 ### 环境依赖
-node v0.10.28+  
-redIs ~  
+golang v1.14.4    
 
 ### 部署步骤
 1. 创建protobuf中间文件protos/goods/goods.proto    
@@ -48,7 +47,7 @@ redIs ~
 │   ├── local.json              // 本地  
 │   ├── production.json         // 生产环境  
 │   └── test.json               // 测试环境  
-├── data  
+├── keys                        // 证书文件  
 ├── protos                      // protos文档  
 ├── environment  
 ├── gulpfile.js  
