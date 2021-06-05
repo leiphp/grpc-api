@@ -1,0 +1,21 @@
+syntax = "proto3";
+package services;
+import "google/api/annotations.proto";
+
+option go_package = "../services";
+message GoodsRequest {
+ // @inject_tag: uri:"goods_id"
+ int32 goods_id=1;  //传入商品ID
+}
+
+message GoodsResponse {
+ int32 goods_stock=1;  //商品库存
+}
+
+service GoodsService {
+ rpc GetGoodsStock(GoodsRequest) returns (GoodsResponse) {
+     option (google.api.http) = {
+       get: "/v1/goods/{goods_id}"
+     };
+  }
+}

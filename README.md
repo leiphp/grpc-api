@@ -24,14 +24,14 @@ golang v1.14.4
          }
     ```   
 
-2. proto文件编译  //protoc编译
-    protoc --go_out=plugins=grpc:../../services goods.proto    //protoc编译生成goods.pb.go   
-    protoc --grpc-gateway_out=logtostderr=true:../../services  //编译生成goods.pb.gw.go  
+2. 安装功能
+    go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+    go get github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+
+3. proto文件编译  //protoc编译
+    protoc --go_out=plugins=grpc:../services goods.proto    //protoc编译生成goods.pb.go   
+    protoc --grpc-gateway_out=logtostderr=true:../services goods.proto  //编译生成goods.pb.gw.go  
     
-
-3. 编译项目   //编译  
-    go build
-
 4. 启动项目  
     go run main.go  
 
