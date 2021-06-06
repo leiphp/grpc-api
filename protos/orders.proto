@@ -5,6 +5,9 @@ import "models.proto";
 
 option go_package = "../services";
 
+message OrdersRequest{
+    OrderMain order_main=1;
+}
 
 message OrdersResponse {
   string status=1;
@@ -12,9 +15,10 @@ message OrdersResponse {
 }
 
 service OrdersService {
-  rpc CreateOrder(OrderMain) returns (OrdersResponse) {
+  rpc CreateOrder(OrdersRequest) returns (OrdersResponse) {
     option (google.api.http) = {
-      get: "/v1/orders/create"
+      post: "/v1/orders/create"
+      body: "order_main"
     };
   }
 }
