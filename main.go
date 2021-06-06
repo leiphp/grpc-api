@@ -11,7 +11,10 @@ import (
 func main(){
 	//grpc服务监听方式
 	rpcServer := grpc.NewServer(grpc.Creds(helper.GetServerCreds()))
+	//注册商品服务
 	services.RegisterGoodsServiceServer(rpcServer,new(services.GoodsService))
+	//注册订单服务
+	services.RegisterOrdersServiceServer(rpcServer,new(services.OrdersService))
 
 	//rpc服务监听方式
 	lis, err := net.Listen("tcp",":8081")
