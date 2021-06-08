@@ -31,3 +31,9 @@ message OrderDetail{
     float goods_price=4;
     int32 goods_num=5;
 }
+
+//用户模型
+message UserInfo {
+    int32 user_id=1;
+    int32 user_score=2;
+}

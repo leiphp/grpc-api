@@ -15,6 +15,8 @@ func main(){
 	services.RegisterGoodsServiceServer(rpcServer,new(services.GoodsService))
 	//注册订单服务
 	services.RegisterOrdersServiceServer(rpcServer,new(services.OrdersService))
+	//用户积分服务
+	services.RegisterUserServiceServer(rpcServer,new(services.UserService))
 
 	//rpc服务监听方式
 	lis, err := net.Listen("tcp",":8081")
