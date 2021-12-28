@@ -5,7 +5,7 @@ http:
   address: 0.0.0.0:8084
 oauth:
 #  address: 172.30.5.112:31473
-  address: 10.250.200.241:9002
+  address: 127.0.0.1:9002
 trace:
   service_name: grpc-gateway
   agent_host: 10.250.200.218
