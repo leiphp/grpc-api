@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package oms;
+
+message HeyteaTakeout {
+    string companyPuid = 1;
+    string consumerkey = 2;
+    HeyteaTakeoutData data = 3;
+    // repeated PaymentItem paymentItems = 22;
+}
+
+message HeyteaTakeoutData {
+    string ordersNo = 1;
+    string shopId = 2;
+    string ordersSeq = 3;
+    string ordersTime = 4;
+    string ordersStatus = 5;
+    string expectTime = 6;
+    string posOuid = 7;
+    string deliverType = 8;
+    string totalAmount = 9;
+    string paidStatus = 10;
+    string paidAmount = 11;
+    string customerRefNo = 13;
+    string orderLinkType = 14;
+    string partnerPlatformId = 15;
+    string partnerPlatformName = 16;
+    string memo = 17;
+    HeyteaTakeaway takeaway = 18; 
+    repeated HeyteaProductItem items = 19;
+    repeated HeyteaFee fees = 20;
+    repeated HeyteaPromotion promos = 21;
+    // 下单时间
+    int64 ordersTimestamp = 22;
+    // 期望送达时间
+    int64 expectTimestamp = 23;
+}
+
+message HeyteaTakeaway {
+    string receiverTel = 1;
+    string receiverName = 2;
+    string receiverRegion = 3;
+    string receiverAddress = 4;
+    string reveiverPosition = 5;
+    string wxName = 6;
+}
+
+message HeyteaProductItem {
+    string skuId = 1;
+    string skuName = 2;
+    string salePrice = 3;
+    int32 qty = 4;
+    double saleAmount = 5;
+    double extraAmount = 6;
+    double itemAmount = 7;
+    string memo = 8;
+    repeated HeyteaMix mixs = 9;
+    repeated HeyteaFeature features = 10;
+    repeated HeyteaProductItem combos = 11;
+    int32 seqOrder = 12;
+}
+
+message HeyteaMix {
+    string mixId = 1;
+    string mixName = 2;
+    double mixPrice = 3;
+    int32 mixQty = 4;
+    double mixAmount = 5;
+}
+
+message HeyteaFeature {
+    string featureId = 1;
+    string featureName = 2;
+}
+
+message HeyteaFee {
+    string feeType = 1;
+    string feeName = 2;
+    string feePrice = 3;
+    int32 feeQty = 4;
+    double feeAmount = 5;
+}
+
+message HeyteaPromotion {
+    string promoType = 1;
+    string promoName = 2;
+    double promoValue = 3;
+    double promoAmount = 4;
+    string referenceNo = 5;
+    string couponType = 6;
+}
+
+message HeyteaPaymentItem {
+
+}

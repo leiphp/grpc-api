@@ -1,0 +1,307 @@
+syntax = "proto3";
+
+package oms;
+
+message Ticket {
+    string ticket_id = 1; //订单uuid，全市场范围内唯一
+    string ticket_no = 2; //订单号，有特殊的业务规则
+    string start_time =3; //YYYY-MM-dd HH:MM:SS，订单开始时间
+    string end_time = 4; //YYYY-MM-dd HH:MM:SS，订单结束时间
+    string bus_date = 5; //YYYY-MM-dd，订单营业日期
+    Pos pos = 6; //pos信息
+    Operator operator = 7; //收银员信息
+    Amount amounts = 8; //金额信息
+    string takemealNumber = 9; //取餐号
+    int32 qty = 10; //订单商品总数
+
+
+    string status = 11;
+    RefundInfo refundInfo = 12; //订单的退款相关信息
+    Channel  channel = 13; //订单的渠道信息
+
+    repeated Product products = 14; //订单商品信息
+
+    repeated Payment payments = 15; //订单的支付信息
+
+    repeated Promotion promotions = 16; //订单的促销信息
+
+    repeated Member members = 17; //订单的会员信息
+
+    Table table = 18; //桌位信息
+
+    int32 people = 19; //订单人数
+
+    string room_no = 20; //房间号
+
+    string remark = 21; //订单备注
+
+    bool house_ac = 22; //如家场景，意义待明确
+
+    string order_time_type = 23; //早中晚餐标志，枚举值
+
+    string shiftNumber = 24; //班次号
+
+    repeated Tax taxList = 25; //税项
+
+    Store store = 26; //门店信息
+
+    Takeaway takeaway_info = 34; //外卖信息
+
+    string ticketUno = 35; //订单唯一流水号
+
+    repeated Coupon coupons = 36; //卡券信息
+
+    //费用信息
+    repeated Fee fees = 37;
+    //时区信息
+    string timeZone = 38;
+
+    Prior prior = 39; //插单信息
+    Currency currency = 40; //币种信息
+    bool discount_proportioned = 41; //是否已折扣分摊
+    bool spellOrder = 42; //是否是拼单订单
+}
+
+message Prior { // 插单
+    string code = 1;
+    string reason = 2;
+    bool isPrior = 3;
+}
+
+message Store { //门店信息
+    string id = 1;
+    string code = 2;
+    string secondCode = 3; //门店三方编码
+    string companyId = 4; //门店三方id
+}
+
+message Pos { //pos相关的信息
+    string id = 1; //pos id
+    string code = 2; // pos 编码
+    string pos_name = 3; //pos名称
+    string device_id = 4; // pos的设备id
+    string device_code = 5; //pos设备编码
+}
+
+message Amount {
+    double taxAmount = 1;
+    double gross_amount = 2;
+    double net_amount = 3;
+    double pay_amount = 4;
+    double discount_amount = 5;
+    double removezero_amount = 6;
+    double rounding = 7;
+    double overflow_amount = 8;
+    double changeAmount = 9;
+    double serviceFee = 10;
+    double tip = 11;
+}
+
+message Operator { //订单收银员相关的信息
+    string id = 1; // 收银员id
+    string name = 2; //收银员姓名
+    string code = 3; //收银员code
+    string login_time = 4; //登陆时间
+    string loginId = 5; //登陆id
+}
+
+message Table { //桌位信息
+    string id = 1; //桌位id
+    string zone_id = 2; //桌位分区id
+    string no = 3; //桌位号
+    string zoneNo = 4; //桌位分区号
+    int32 people = 5; //桌位人数
+    bool temporary = 6; //是否是临时桌位
+}
+
+message Channel {
+    string source = 1;
+    string deviceType = 2;
+    string orderType = 3;
+    string deliveryType = 4;
+    string tpName = 5;
+    string code = 6;
+}
+
+
+message RefundInfo {
+    string refund_id = 1;// 退单负单的ticketId，
+    string ref_ticket_id = 2; //退单正单的ticketId
+    string ref_ticket_no = 3; //退单正单的ticketNo
+    string refund_reason = 4; //退单原因
+}
+
+message Product { //订单商品
+    string id = 1; //商品id
+    string name = 2; //商品名称
+    string code = 3; //商品编码
+    int64 seq_id = 4; //商品的顺序号，代表下单的顺序
+    double price = 5; //商品单价
+    double amount = 6; //商品总价
+    int32 qty = 7; //商品数量
+    double discount_amount = 8; //商品的折扣金额
+    string type = 9; //商品类型
+    repeated Product accessories = 10; //加料
+    repeated Product combo_items = 11; //套餐子项
+    string operation_records = 12; //操作记录
+    repeated SkuRemark skuRemark = 13; //sku属性
+    string remark = 14; //商品备注
+    double taxAmount = 15; //税额
+    double net_amount = 16; //净额
+    repeated SpellUser spellUsers = 17; //当前商品所属的用户昵称 （用于拼单场景）
+    Blessing blessing = 18; // 商品祝福信息
+}
+
+message SpellUser{
+    string name = 1;
+    int32 qty = 2;
+}
+
+message Currency {
+    string name = 1; //币种名称
+    string symbol = 2; //币种符号
+}
+
+message SkuRemark {
+    message skuName {
+        string id = 1; //sku属性id
+        string code = 2; //sku属性code
+        string name = 3; //sku属性名称
+    }
+    message skuValue {
+        string code = 1; //sku属性值code
+        string name = 2; //sku属性值名称
+    }
+    skuName name = 1;
+    skuValue values = 2;
+}
+
+message Tax {
+    double amount = 1; //税金额
+    double subTotal = 2; //纳税商品总额
+    string code = 3; //税种编码
+    string name = 4; //税种名称
+    double rate = 5; //税率
+}
+
+message Payment { //支付信息
+    string id = 1; //支付id
+    string seq_id = 2; //支付顺序号
+    double pay_amount = 3; //支付金额
+    double realPayAmount = 4; //字段废弃
+    double change = 5; //找零
+    double overflow = 6; //溢收
+    double rounding = 7; //rounding
+    string pay_time = 8; //支付时间，YYYY-MM-DD HH:MM:SS
+    string trans_code = 9; //支付方式编码
+    string name = 10; //支付方式名称
+    //实收金额
+    double receivable = 11;
+    string tpTransactionNo= 12;
+}
+
+message Promotion { //促销
+    PromotionInfo promotionInfo = 1;
+    PromotionSource source = 2;
+    repeated PromotionProduct products = 3;
+}
+
+message PromotionInfo {
+    string type = 1;
+    string discount_type = 2;
+    string name = 3;
+    string promotion_id = 4;
+    string promotion_code = 5;
+    string promotion_type = 6;
+    bool allow_overlap = 7;
+    bool trigger_times_custom = 8;
+    string ticket_display = 9;
+    double max_discount = 10;
+}
+
+message PromotionSource {
+    int32 trigger = 1;
+    double discount = 2;
+    repeated string fired = 3;
+}
+
+message PromotionProduct {
+    double price = 1;
+    double amt = 2;
+    double accAmt = 3;
+    int32 qty = 4;
+    string key_id = 5;
+    repeated string accies = 6;
+    string type = 7;
+    double discount = 8;
+    double free_amt = 9;
+    string method = 10;
+}
+
+message Member {
+    string member_code = 1;
+    string mobile = 2;
+    string name = 3;
+    string greetings = 4;
+}
+
+message Coupon {
+    bool is_online = 1;
+    string id = 2;
+    string name = 3;
+    string code = 4;
+    int64 type = 5;
+    double par_value = 6;
+    string sequence_id = 7;
+}
+
+message Fee {
+    string name = 1;
+    double price = 2;
+    int32 qty = 3;
+    double amount= 4;
+    string type = 5;
+}
+
+message Takeaway {
+    string order_method = 1;
+    bool is_paid = 3;
+    string tp_order_id = 4;
+    string order_time = 5;
+    string deliver_time = 6;
+    string description = 7;
+    string consignee = 8;
+    string delivery_poi_address = 9;
+    repeated string phone_list= 10;
+    string tp = 11;
+    string source = 12;
+    string source_order_id = 13;
+    string day_seq = 14;
+    int32 delivery_type = 15;
+    string delivery_name = 16;
+    string invoice_title = 17;
+    string waiting_time = 18;
+    int32 tableware_num = 19;
+    double send_fee = 20;
+    double package_fee = 21;
+    string delivery_time = 22;
+    string take_meal_sn = 23;
+    int32 partnerPlatformId = 24;
+    string partnerPlatformName = 25;
+    string wxName = 26;
+    bool isHighPriority = 27;
+    //外卖订单类型
+    string takeoutType = 28;
+    //部分退款时的外卖原单号
+    string originalOrderNo = 29;
+    string remarks = 30;
+    Blessing blessing = 31; //祝福信息
+    string nickName = 32; //用户原始昵称
+}
+
+message Blessing{
+    string templateId = 1;
+    string to = 2;
+    string content = 3;
+    string from = 4;
+}

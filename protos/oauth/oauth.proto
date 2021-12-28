@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package oauth;
+
+import "google/api/annotations.proto";
+
+service HexOauth {
+    rpc Ping (Null) returns (Pong) {}
+    rpc IntrospectToken(IntrospectTokenRequest) returns (IntrospectTokenResponse) {
+        option (google.api.http) = {
+          post: "/v1/token/introspect"
+          body: "*"
+        };
+    }
+    rpc GetUserById(GetUserRequest) returns (User) {}
+    rpc ListUserPermissionCodes(ListUserPermissionRequest) returns (ListUserPermissionResponse) {}
+    rpc GetPosToken(GetPosTokenRequest) returns (GetPosTokenResponse) {}
+    rpc GetPosClient(GetPosClientRequest) returns (GetPosClientResponse) {}
+}
+
+message GetPosClientRequest {
+    uint64 partner_id = 1;
+    uint64 scope_id = 2;
+    uint64 terminal_id = 3;
+}
+
+message GetPosClientResponse {
+    string client_id = 1;
+    string client_secret = 2;
+}
+
+message GetPosTokenRequest {
+    string client_id = 1;
+    string client_secret = 2;
+}
+
+
+message GetPosTokenResponse {
+    string access_token = 1;
+    string token_type = 2;
+    uint64 expires_in = 3;   // token过期时间
+    string scope = 4;
+}
+
+message ListUserPermissionRequest {
+    uint64 user_id = 1;
+    uint64 partner_id = 2;
+}
+
+message ListUserPermissionResponse {
+    repeated string permission_codes = 1;
+}
+
+message IntrospectTokenRequest {
+    string token = 1;
+    string api_code = 2;
+    string url = 3;
+    string disable_permission_check = 4;
+}
+
+message IntrospectTokenResponse {
+    uint64 partner_id = 2;
+    uint64 user_id = 3;
+    uint64 scope_id = 4;
+    uint64 terminal_id = 5;
+}
+
+message GetUserRequest {
+    uint64 id = 1;
+    bool with_roles = 2;
+    bool with_scope = 3;
+}
+
+message User {
+    uint64 id = 1;
+    uint64 partner_id = 2;
+    uint64 scope_id = 3;
+    string name = 4;
+    string code = 5;
+    string email = 6;
+    bool is_system = 7;
+    bool is_locked = 8;
+    repeated Role roles = 9;
+}
+
+message Role {
+    uint64 id = 1;
+    uint64 partner_id = 2;
+    string name = 3;
+    string code = 4;
+}
+
+message Null {
+}
+
+message Pong {
+    string pong = 1;
+}

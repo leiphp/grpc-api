@@ -1,0 +1,55 @@
+debug: true
+open_rancher_test: false
+client_sleep_time: 3
+http:
+  address: 0.0.0.0:8084
+oauth:
+#  address: 172.30.5.112:31473
+  address: 10.250.200.241:9002
+trace:
+  service_name: grpc-gateway
+  agent_host: 10.250.200.218
+  agent_port: 6831
+  sample_type: const
+  sample_params: 1
+  disable: false
+services:
+  goods:
+    address: 127.0.0.1:8085
+    enable: true
+
+  metadata_entity:
+    address: 10.250.200.241:5012
+    enable: false
+
+  metadata_schema:
+    address: 10.250.200.241:5012
+    enable: false
+
+  metadata_relation:
+    address: 10.250.200.241:5012
+    enable: false
+
+  stocktake:
+    address: 127.0.0.1:8686
+    enable: false
+
+  transfer:
+    address: 127.0.0.1:8686
+    enable: false
+
+  demo:
+    address: 127.0.0.1:5050
+    enable: false
+
+  coupon:
+    address: 127.0.0.1:8088
+    enable: false
+
+  payment:
+    address: 127.0.0.1:8088
+    enable: false
+
+  oms:
+    address: 10.250.200.241:8088
+    enable: true

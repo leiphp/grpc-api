@@ -2,11 +2,11 @@
 // source: goods.proto
 
 /*
-Package services is a reverse proxy.
+Package goods is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package services
+package goods
 
 import (
 	"context"

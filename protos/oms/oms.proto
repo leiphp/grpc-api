@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package oms;
+
+import "proto/oms/ticket.proto";
+import "google/api/annotations.proto";
+import "proto/oms/takeout.proto";
+
+service Oms {
+    rpc HelloMethod(HelloRequest) returns (HelloResponse) {
+        option (google.api.http) = {
+            get: "/api/v2/oms/hello"
+        };
+    }
+
+    //健康检查
+    rpc HealthCheck(HealthRequest) returns (HealthResponse) {
+        option (google.api.http) = {
+            get: "/api/v2/oms/health"
+        };
+    }
+
+    //上传订单
+    rpc UploadTicket(UploadTicketRequest) returns (UploadTicketResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/tickets",
+            body: "*"
+        };
+    }
+
+    //批量上传订单
+    rpc UploadTicketBatch(UploadTicketBatchRequest) returns (UploadTicketBatchResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/tickets/batch",
+            body: "*"
+        };
+    }
+
+    //根据id获取订单
+    rpc GetTicketByIds(GetTicketByIdsRequest) returns (GetTicketByIdsResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/tickets/ticketIds",
+            body: "*"
+        };
+    }
+
+    //根据门店和起止日期获得已经上传的订单
+    rpc GetUploadTicketByStoreId(GetUploadTicketByStoreIdRequest) returns (GetUploadTicketByStoreIdResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/stores/{storeId}",
+            body: "*"
+        };
+    }
+
+    rpc GetTicketByTicketUNo(GetTicketByTicketUNoRequest) returns (GetTicketByTicketUNoResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/tickets/ticketUnos",
+            body: "*"
+        };
+    }
+
+    rpc AcceptCancelOrder(AcceptCancelOrderRequest) returns (AcceptCancelOrderResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/takeouts/cancel",
+            body: "*"
+        };
+    }
+
+
+    rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (UpdateOrderStatusReponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/takeouts/status",
+            body: "*"
+        };
+    }
+
+
+    rpc GetOrderByStore(GetOrderByStoreRequest) returns (GetOrderByStoreResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/takeouts/store",
+            body: "*"
+        };
+    }
+
+    rpc GetOrderById(GetOrderByIdRequest) returns (Ticket) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/takeouts/order/{id}",
+            body: "*"
+        };
+    }
+
+    rpc SyncTakeout(SyncTakeoutRequest) returns (SyncTakeoutResponse) {
+        option (google.api.http) = {
+            post: "/api/v2/oms/takeouts/sync",
+            body: "*"
+        };
+    }
+    
+}
+
+message HelloRequest {
+    string type = 1;
+}
+
+message HelloResponse {
+    string msg = 1;
+}
+
+
+message HealthRequest {
+
+}
+
+message HealthResponse {
+
+}
+
+message ErrResponse {
+    //错误类型
+    string type = 1;
+    //错误具体信息
+    string msg = 2;
+}
+
+message UploadTicketErr {
+    //订单 id
+    string ticketId = 1;
+    //错误信息
+    ErrResponse err = 2;
+}
+
+
+message UploadTicketRequest {
+    // (必传)门店id
+    string storeId = 1;
+    // （必传）pos机id
+    string posId = 2;
+    // （必传）完整的ticket信息
+    Ticket ticket = 3;
+}
+
+message UploadTicketResponse {
+    // （必传）是否上传成功
+    bool success = 1;
+    // 错误信息
+    UploadTicketErr uploadErr = 2;
+}
+
+
+message UploadTicketBatchRequest {
+    // (必传)门店id
+    string storeId = 1;
+    // （必传）pos机id
+    string posId = 2;
+    // （必传）订单
+    repeated Ticket tickets = 3;   
+}
+
+message UploadTicketBatchResponse {
+    // 是否全部上传成功
+    bool success = 1;
+    // 上传失败订单的错误信息
+    ErrResponse uploadErr = 2;
+}
+
+
+
+message GetTicketByIdsRequest {
+    // （必传）订单id
+    repeated string ticketIds = 1;
+}
+
+message GetTicketByIdsResponse {
+    repeated Ticket tickets = 1;
+    ErrResponse err = 2;
+}
+
+message GetUploadTicketByStoreIdRequest {
+    // （必传）门店id
+    string storeId  = 1;
+    // （必传）起始日期
+    string startDate = 2;
+    // （必传）截止日期
+    string endDate = 3;
+}
+
+message GetUploadTicketByStoreIdResponse {
+    message DateIds {
+        string date = 1;
+        repeated string ticketIds = 2;
+    }
+    repeated DateIds uploadTicketIds = 1;
+    ErrResponse err = 2;
+}
+
+
+message GetTicketByTicketUNoRequest {
+    repeated string ticketUNos = 1;
+}
+
+message GetTicketByTicketUNoResponse {
+    repeated Ticket tickets = 1;
+    ErrResponse err = 2;
+}
+
+
+
+message AcceptHeyteaNewOrderResponse {
+    string ordersNo = 1;
+    string ordersOuid = 2;
+    string soOuid = 3;
+}
+
+
+message AccpetNewOrderRequest {
+
+}
+
+message AcceptNewOrderResponse {
+
+}
+
+message AcceptCancelOrderRequest {
+    string shopId = 1;
+    string ordersNo = 2;
+}
+
+message AcceptCancelOrderResponse {
+    bool success = 1;
+}
+
+message UpdateOrderStatusRequest {
+    string ticketId = 1;
+    string status = 2;
+    string action = 3;
+}
+
+message UpdateOrderStatusReponse {
+    string ticketId = 1;
+    string status = 2;
+    bool success = 3;
+}
+
+
+
+message GetOrderByIdRequest {
+    string id = 1;
+}
+
+
+
+message GetOrderByStoreRequest {
+    string id = 1;
+
+}
+
+message GetOrderByStoreResponse {
+
+}
+
+message SyncTakeoutRequest {
+    string posId = 1;
+    string storeId = 2;
+    int32 limit = 3;
+    string timeStamp = 4;
+    bool WithDetail = 5;
+    bool WithID = 6;
+}
+
+
+message SyncTakeoutResponse {
+    string timeStamp = 1;
+}
