@@ -69,4 +69,5 @@ golang v1.14.4
 3. 新功能     获取会员信息
 4. 新功能     服务熔断降级 
 
-### services目录和http_server.go代理文件作废
+### services目录作废
+gen.bat一般不生成xx.pw.go和xx.gw.go文件，从grpc服务端复制过来
