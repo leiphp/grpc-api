@@ -24,8 +24,27 @@ message GetCommentResponse {
 service CommentService {
   rpc GetComment(GetCommentRequest) returns (GetCommentResponse) {
     option (google.api.http) = {
-      post: "/v1/comment/{postId}"
+      post: "/v1/comment/{postId}",
       body: "*"
     };
   }
+  //新增评论
+  rpc AddComment(AddCommentRequest) returns (AddCommentResponse) {
+    option (google.api.http) = {
+      post: "/v1/comment/add",
+      body: "*"
+    };
+  }
+}
+
+message AddCommentRequest {
+  // (必传)帖子评论信息
+  Comment comment = 1;
+}
+
+message AddCommentResponse {
+  // （必传）是否上传成功
+  bool success = 1;
+  // 错误信息
+  ErrResponse err = 2;
 }
