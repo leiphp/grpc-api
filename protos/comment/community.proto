@@ -1,0 +1,31 @@
+syntax = "proto3";
+package services;
+option go_package ="./comment";
+import "google/api/annotations.proto";
+import "comment.proto";
+
+
+message ErrResponse {
+  //错误类型
+  string type = 1;
+  //错误具体信息
+  string msg = 2;
+}
+
+message GetCommentRequest{
+    int64 postId=1;
+}
+
+message GetCommentResponse {
+  repeated Comment comments = 1;
+  ErrResponse err = 2;
+}
+
+service CommentService {
+  rpc GetComment(GetCommentRequest) returns (GetCommentResponse) {
+    option (google.api.http) = {
+      post: "/v1/comment/{postId}"
+      body: "*"
+    };
+  }
+}

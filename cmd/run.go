@@ -17,6 +17,7 @@ import (
 	"google.golang.org/grpc"
 	"grpc-gateway/config"
 	//"grpc-gateway/pkg"
+	commentPb "grpc-gateway/protos/comment"
 	goodsPb "grpc-gateway/protos/goods"
 	omsPb "grpc-gateway/protos/oms"
 
@@ -76,31 +77,13 @@ func Run() {
 	server, err := pkg.NewGateWayServer()
 	checkError(err)
 	supportServiceMap := map[string]RegisterFunc{
-		//"metadata_relation": metarelationpb.RegisterRelationServiceHandlerFromEndpoint,
-		//"metadata_entity":   metaentitypb.RegisterEntityServiceHandlerFromEndpoint,
-		//"metadata_schema":   metaschemapb.RegisterSchemaServiceHandlerFromEndpoint,
-		//"demo":              demopb.RegisterEchoServiceHandlerFromEndpoint,
-		//"meta":              metapb.RegisterMetaServiceHandlerFromEndpoint,
-		//"cash_report":       cashReportPb.RegisterCashReportHandlerFromEndpoint,
-		//"operation_report":  operationReportPb.RegisterOperationReportHandlerFromEndpoint,
-		//"oss_service":       ossService.RegisterOssServiceHandlerFromEndpoint,
-		//"report_eticket":    eticketReportPb.RegisterETicketHandlerFromEndpoint,
-		//"report_dayknot":    dayknotReportPb.RegisterDayKnotHandlerFromEndpoint,
-		//"data_export":       data_export.RegisterTaskServiceHandlerFromEndpoint,
-		//"overview_report":   overviewReportPb.RegisterOverviewReportHandlerFromEndpoint,
-		//"applet":            appletPb.RegisterAppletServiceHandlerFromEndpoint,
+		"comment":           commentPb.RegisterCommentServiceHandlerFromEndpoint,
 		"goods":             goodsPb.RegisterGoodsServiceHandlerFromEndpoint,
 		//"payflow":           payflowPb.RegisterPayflowHandlerFromEndpoint,
 		"oms":               omsPb.RegisterOmsHandlerFromEndpoint,
 		//"coupon":            couponPb.RegisterCouponServiceHandlerFromEndpoint,
 		//"payment":           paymentPb.RegisterPaymentIntegrationHandlerFromEndpoint,
-		//"rule":              rulePb.RegisterRuleServiceHandlerFromEndpoint,
-		//"contract":          contractPb.RegisterContractServiceHandlerFromEndpoint,
-		//"center":            centerPb.RegisterCenterServiceHandlerFromEndpoint,
 		//"product":           productPb.RegisterProductServiceHandlerFromEndpoint,
-		//"pos_report":        posReportPb.RegisterHeyteaPosReportServerHandlerFromEndpoint,
-		//"eticket":           eticketPb.RegisterEticketHandlerFromEndpoint,
-		//"sales_report":      salesReportPb.RegisterSalesReportHandlerFromEndpoint,
 	}
 
 	opts := []grpc.DialOption{

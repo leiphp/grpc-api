@@ -1,0 +1,13 @@
+syntax = "proto3";
+package services;
+option go_package ="./comment";
+
+message Comment {
+  int64 id = 1;
+  int64 ouid = 2;
+  int32 likeNum = 3;
+  int32 pid = 4;
+  int64 postId = 5;
+  string content = 6;
+  int64 createTime = 7;
+}

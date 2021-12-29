@@ -18,9 +18,9 @@ services:
     address: 127.0.0.1:8085
     enable: true
 
-  metadata_entity:
-    address: 10.250.200.241:5012
-    enable: false
+  comment:
+    address: 127.0.0.1:8085
+    enable: true
 
   metadata_schema:
     address: 10.250.200.241:5012
