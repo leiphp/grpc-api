@@ -387,9 +387,9 @@ func RegisterCommentServiceHandlerClient(ctx context.Context, mux *runtime.Serve
 }
 
 var (
-	pattern_CommentService_GetComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "comment", "postId"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_CommentService_GetComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "comment", "post", "postId"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_CommentService_AddComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "comment", "add"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_CommentService_AddComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "comment", "add", "comm"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_CommentService_DelComment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "comment", "del", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 )

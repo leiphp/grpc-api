@@ -24,14 +24,14 @@ message GetCommentResponse {
 service CommentService {
   rpc GetComment(GetCommentRequest) returns (GetCommentResponse) {
     option (google.api.http) = {
-      post: "/v1/comment/{postId}"
+      post: "/v1/comment/post/{postId}"
       body: "*"
     };
   }
   //新增评论
   rpc AddComment(AddCommentRequest) returns (AddCommentResponse) {
     option (google.api.http) = {
-      post: "/v1/comment/add"
+      post: "/v1/comment/add/comm"
       body: "*"
     };
   }
