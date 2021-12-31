@@ -10,4 +10,9 @@ message Comment {
   int64 postId = 5;
   string content = 6;
   int64 createTime = 7;
+  string head_img = 8;
+  string nickname = 9;
+  int64 is_admin = 10;
+  int64  is_vip = 11;
+  string create_date =12;
 }

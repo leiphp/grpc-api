@@ -17,8 +17,13 @@ message GetCommentRequest{
 }
 
 message GetCommentResponse {
-  repeated Comment comments = 1;
-  ErrResponse err = 2;
+  repeated Comment rows = 1;
+  int64  count =2;
+  int64  total=3;
+  int64  pages=4;
+  int64  page=5;
+  int64  perPage=6;
+  ErrResponse err = 7;
 }
 
 service CommentService {
