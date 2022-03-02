@@ -71,3 +71,5 @@ golang v1.14.4
 
 ### services目录作废
 gen.bat一般不生成xx.pw.go和xx.gw.go文件，从grpc服务端复制过来
+
+git flow test
